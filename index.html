@@ -1,11 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wednesday Countdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      background: #f0f8ff;
+    }
+    h1 {
+      font-size: 3em;
+      color: #333;
+    }
+    #timer {
+      font-size: 2em;
+      margin-top: 20px;
+      color: #0077cc;
+    }
+  </style>
 </head>
 <body>
-    <h1>Test H1 Tag</h1>
+  <h1 id="title">Countdown to Wednesday</h1>
+  <div id="timer">Loading...</div>
+
+  <script>
+    function getNextWednesday() {
+      const now = new Date();
+      const day = now.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+      const diff = (3 + 7 - day) % 7 || 7; // days until next Wednesday
+      const nextWednesday = new Date(now);
+      nextWednesday.setDate(now.getDate() + diff);
+      nextWednesday.setHours(0, 0, 0, 0);
+      return nextWednesday;
+    }
+
+    function updateTimer() {
+      const now = new Date();
+      const day = now.getDay();
+
+      if (day === 3) {
+        document.getElementById("title").textContent = "It's Wednesday";
+        document.getElementById("timer").textContent = "";
+        return;
+      }
+
+      const nextWednesday = getNextWednesday();
+      const timeLeft = nextWednesday - now;
+
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+      const seconds = Math.floor((timeLeft / 1000) % 60);
+
+      document.getElementById("timer").textContent =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // Start ticking
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
 </body>
 </html>
